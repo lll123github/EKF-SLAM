@@ -9,6 +9,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.patches import Ellipse
 
+figsize=(10,6)
 def stateToArrow(state):
     x = state[0]
     y = state[1]
@@ -17,14 +18,16 @@ def stateToArrow(state):
     return x,y,dx,dy
 
 def plotMap(ls,ldt,hist,robot,mapsize):
+    plt.figure(figsize=(20, 8))  # 宽度和高度（单位：英寸）
+    # plt.show()
     plt.clf()
     
     x = robot.x_true
     fov = robot.fov
     
     # Plot true environment
-    plt.subplot(1,3,1).cla()
-    plt.subplot(131, aspect='equal')
+    plt.subplot(1,4,1).cla()
+    plt.subplot(141, aspect='equal')
     
     # Plot field of view boundaries
     plt.plot([x[0], x[0]+50*np.cos(x[2] + fov/2)], [x[1], x[1]+50*np.sin(x[2] + fov/2)], color="r")
@@ -51,7 +54,7 @@ def plotMap(ls,ldt,hist,robot,mapsize):
     
 
 def plotEstimate(mu, cov, robot, mapsize):
-    a = plt.subplot(132, aspect='equal')
+    a = plt.subplot(142, aspect='equal')
     a.cla()
     
     # plot robot state history
@@ -87,7 +90,9 @@ def plotEstimate(mu, cov, robot, mapsize):
     plt.pause(0.1)
     
 def plotMeasurement(mu, cov, obs, n):
-    a = plt.subplot(132, aspect='equal')
+    return
+    a = plt.subplot(143, aspect='equal')
+    a.cla()
         
     for z in obs:
         j = int(z[2])
@@ -107,7 +112,8 @@ def plotMeasurement(mu, cov, obs, n):
     plt.pause(0.01)
 
 def plotError(mu,x_true):
-    b = plt.subplot(133)
+    b = plt.subplot(143)
+    b.cla()
     mu = mu[:3,0::2] # keep only x,y,theta
     x_true = (np.asarray(x_true).T)[:,:mu.shape[1]]
     dif = np.power(np.abs(mu - x_true),2)
